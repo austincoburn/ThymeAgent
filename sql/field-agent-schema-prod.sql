@@ -96,6 +96,18 @@ create table alias (
         references agent(agent_id)
 );
 
+
+	insert into agent 
+		(first_name, middle_name, last_name, dob, height_in_inches) 
+	values
+		('Hazel','C','Sauven','1954-09-16',76),
+		('Claudian','C','O''Lynn','1956-11-09',41),
+		('Winn','V','Puckrin','1999-10-21',60),
+		('Kiab','U','Whitham','1960-07-29',52),
+		('Min','E','Dearle','1967-04-18',44),
+		('Urban','H','Carwithen',null,58),
+		('Ulises','B','Muhammad','2008-04-01',80),
+		('Phylys','Y','Howitt','1979-03-28',68);
 -- data
 insert into security_clearance values
 	(1, 'Secret'),

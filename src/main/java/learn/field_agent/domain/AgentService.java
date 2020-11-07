@@ -58,18 +58,25 @@ public class AgentService {
 
     public Result<Agent> update(Agent agent) {
         Result<Agent> result = validate(agent);
-        if (!result.isSuccess()) {
-            return result;
-        }
-
         if (agent.getAgentId() <= 0) {
             result.addMessage("agentId must be set for `update` operation", ResultType.INVALID);
             return result;
         }
 
-        if (!repository.update(agent)) {
-            String msg = String.format("agentId: %s, not found", agent.getAgentId());
-            result.addMessage(msg, ResultType.NOT_FOUND);
+        if (result.isSuccess()) {
+            Set<ConstraintViolation<Agent>> violations = validator.validate(agent);
+            if(!violations.isEmpty()) {
+                for (ConstraintViolation<Agent> violation : violations) {
+                    result.addMessage(violation.getMessage(), ResultType.INVALID);
+                }
+            }
+        }
+
+        if(result.isSuccess()) {
+            if (!repository.update(agent)) {
+                String msg = String.format("agentId: %s, not found", agent.getAgentId());
+                result.addMessage(msg, ResultType.NOT_FOUND);
+            }
         }
 
         return result;

@@ -14,6 +14,6 @@ public class DateOfBirthValidator implements ConstraintValidator<NoYoungAgents, 
 
     @Override
     public boolean isValid(LocalDate date, ConstraintValidatorContext constraintValidatorContext) {
-        return date.isAfter(LocalDate.now().minusYears(12));
+        return date.isBefore(LocalDate.now().minusYears(12));
     }
 }

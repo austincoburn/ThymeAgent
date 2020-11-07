@@ -1,4 +1,4 @@
-package learn.field_agent.controllers;
+package learn.field_agent.controllers.api;
 
 import learn.field_agent.domain.Result;
 import learn.field_agent.domain.ResultType;

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent - Agents</title>
+</head>
+<body>
+
+<h1>Agents</h1>
+
+<p><a href="/agents/add">Add an Agent</a></p>
+
+<table>
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Birthday</th>
+            <th>Height</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr th:each="agent: ${agents}">
+            <td th:text="${agent.firstName}"></td>
+            <td th:text="${agent.middleName}"></td>
+            <td th:text="${agent.lastName}"></td>
+            <td th:text="${agent.dob}"></td>
+            <td th:text="${agent.heightInInches}"></td>
+            <td>
+                <a th:href="@{/agents/update/{id}(id=${agent.agentId})}">Edit</a>
+                <a th:href="@{/agents/delete/{id}(id=${agent.agentId})}">Delete</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
+</body>
+</html>
