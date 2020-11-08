@@ -9,10 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.time.LocalDate;
@@ -47,6 +44,34 @@ public class AgentUIController {
             return "agents/create";
         }
         service.add(agent);
+        return "redirect:/agents";
+    }
+
+    @GetMapping("/update/{id}")
+    public String update(@PathVariable int id, Model model)
+            throws DataAccessException {
+        Agent agent = service.findById(id);
+
+        if (agent == null) {
+            return "not-found";
+        }
+
+        model.addAttribute("agent", agent);
+
+        return "agents/update";
+    }
+
+    @PostMapping("/update/*")
+    public String update(
+            @ModelAttribute("agent") @Valid Agent agent,
+            BindingResult result) throws DataAccessException {
+
+        if (result.hasErrors()) {
+            return "agents/update";
+        }
+
+        Result<Agent> serviceResult = service.update(agent);
+
         return "redirect:/agents";
     }
 }

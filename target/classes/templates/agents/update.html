@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent - Update</title>
+</head>
+<body>
+<h1>Update an Agent</h1>
+
+
+<form method="post" th:object="${agent}">
+<div>
+    <label>First Name</label>
+    <input type="text" th:field="*{firstName}">
+    <div th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">
+        Err Message
+    </div>
+</div>
+
+<div>
+    <label>Middle Name</label>
+    <input type="text" th:field="*{middleName}">
+</div>
+
+<div>
+    <label>Last Name</label>
+    <input type="text" th:field="*{lastName}">
+    <div th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">
+        Err Message
+    </div>
+</div>
+
+<div>
+    <label>Date of Birth</label>
+    <input type="date" th:field="*{dob}">
+    <div th:if="${#fields.hasErrors('dob')}" th:errors="*{dob}">
+        Err Message
+    </div>
+</div>
+
+<div>
+    <label>Height in Inches</label>
+    <input type="number" th:field="*{heightInInches}">
+    <div th:if="${#fields.hasErrors('heightInInches')}" th:errors="*{heightInInches}">
+        Err Message
+    </div>
+</div>
+<div>
+    <button type="submit">Update</button>
+    <a href="/agents">Cancel</a>
+</div>
+    <input type="hidden" th:field="*{agentId}">
+
+</form>
+</body>
+</html>
