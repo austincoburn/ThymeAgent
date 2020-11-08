@@ -1,7 +1,5 @@
 package learn.field_agent.validations;
 
-import learn.field_agent.models.Agent;
-
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 import java.time.LocalDate;

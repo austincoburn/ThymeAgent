@@ -22,7 +22,6 @@ public class Agent {
     @NoYoungAgents(message = "Agents must be older than 12 years old")
     private LocalDate dob;
 
-    @NotNull(message = "Height is required")
     @Min(value = 36, message = "Height must be greater than {value}")
     @Max(value = 96, message = "Height must be less than {value}")
     private int heightInInches;

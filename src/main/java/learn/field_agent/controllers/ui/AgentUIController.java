@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -33,28 +34,20 @@ public class AgentUIController {
     @GetMapping("/add")
     public String add(@ModelAttribute("agent") Agent agent, Model model) {
         //set default values
-        agent.setFirstName("Default");
-        agent.setMiddleName(null);
-        agent.setLastName("Default");
-        agent.setDob(null);
+        agent.setFirstName("");
+        agent.setLastName("");
         agent.setHeightInInches(55);
+        agent.setDob(LocalDate.now());
 
         return "agents/create";
     }
 
     @PostMapping("/add")
-    public String add(@ModelAttribute("agent") @Valid Agent agent, BindingResult result, Model model) {
+    public String add(@ModelAttribute("agent") @Valid Agent agent, BindingResult result, Model model) throws DataAccessException {
         if(result.hasErrors()) {
             return "agents/create";
         }
-
-        Result<Agent> agentResult = service.add(agent);
-        if(!agentResult.isSuccess()) {
-            for(String message : agentResult.getMessages()) {
-                result.addError(new ObjectError("agent", message));
-            }
-        }
-
+        service.add(agent);
         return "redirect:/agents";
     }
 }

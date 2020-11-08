@@ -17,6 +17,10 @@ public class AgentService {
     @Autowired
     private Validator validator;
 
+    private enum ValidationMode {
+        CREATE, UPDATE;
+    }
+
     private final AgentRepository repository;
 
     public AgentService(AgentRepository repository) {
@@ -32,21 +36,12 @@ public class AgentService {
     }
 
     public Result<Agent> add(Agent agent) {
-        Result<Agent> result = validate(agent);
-
-        if (agent.getAgentId() != 0) {
-            result.addMessage("agentId cannot be set for `add` operation", ResultType.INVALID);
-            return result;
-        }
-
-        if (result.isSuccess()) {
-            Set<ConstraintViolation<Agent>> violations = validator.validate(agent);
-            if(!violations.isEmpty()) {
-                for (ConstraintViolation<Agent> violation : violations) {
-                    result.addMessage(violation.getMessage(), ResultType.INVALID);
-                }
-            }
-        }
+        Result<Agent> result = validate(agent, ValidationMode.CREATE);
+//
+//        if (agent.getAgentId() != 0) {
+//            result.addMessage("agentId cannot be set for `add` operation", ResultType.INVALID);
+//            return result;
+//        }
 
         if(result.isSuccess()) {
             agent = repository.add(agent);
@@ -57,23 +52,25 @@ public class AgentService {
     }
 
     public Result<Agent> update(Agent agent) {
-        Result<Agent> result = validate(agent);
-        if (agent.getAgentId() <= 0) {
-            result.addMessage("agentId must be set for `update` operation", ResultType.INVALID);
-            return result;
-        }
+        Result<Agent> result = validate(agent, ValidationMode.UPDATE);
+//        if (agent.getAgentId() <= 0) {
+//            result.addMessage("agentId must be set for `update` operation", ResultType.INVALID);
+//            return result;
+//        }
 
-        if (result.isSuccess()) {
-            Set<ConstraintViolation<Agent>> violations = validator.validate(agent);
-            if(!violations.isEmpty()) {
-                for (ConstraintViolation<Agent> violation : violations) {
-                    result.addMessage(violation.getMessage(), ResultType.INVALID);
-                }
-            }
-        }
+//        if (result.isSuccess()) {
+//            Set<ConstraintViolation<Agent>> violations = validator.validate(agent);
+//            if(!violations.isEmpty()) {
+//                for (ConstraintViolation<Agent> violation : violations) {
+//                    result.addMessage(violation.getMessage(), ResultType.INVALID);
+//                }
+//            }
+//        }
 
         if(result.isSuccess()) {
-            if (!repository.update(agent)) {
+            if (repository.update(agent)) {
+                result.setPayload(agent);
+            } else {
                 String msg = String.format("agentId: %s, not found", agent.getAgentId());
                 result.addMessage(msg, ResultType.NOT_FOUND);
             }
@@ -86,29 +83,25 @@ public class AgentService {
         return repository.deleteById(agentId);
     }
 
-    private Result<Agent> validate(Agent agent) {
+    private Result<Agent> validate(Agent agent, ValidationMode validationMode) {
         Result<Agent> result = new Result<>();
         if (agent == null) {
             result.addMessage("agent cannot be null", ResultType.INVALID);
-            return result;
+        } else if(validationMode == ValidationMode.CREATE && agent.getAgentId() > 0) {
+            result.addMessage("Agent Id Should not be set.", ResultType.INVALID);
+        } else if(validationMode == ValidationMode.UPDATE && agent.getAgentId() <= 0) {
+            result.addMessage("Agent id is required", ResultType.INVALID);
         }
 
-//        if (Validations.isNullOrBlank(agent.getFirstName())) {
-//            result.addMessage("firstName is required", ResultType.INVALID);
-//        }
-//
-//        if (Validations.isNullOrBlank(agent.getLastName())) {
-//            result.addMessage("lastName is required", ResultType.INVALID);
-//        }
+        if(result.isSuccess()) {
+            Set<ConstraintViolation<Agent>> violations = validator.validate(agent);
 
-//        if (agent.getDob() != null && agent.getDob().isAfter(LocalDate.now().minusYears(12))) {
-//            result.addMessage("agents younger than 12 are not allowed", ResultType.INVALID);
-//        }
-
-//        if (agent.getHeightInInches() < 36 || agent.getHeightInInches() > 96) {
-//            result.addMessage("height must be between 36 and 96 inches", ResultType.INVALID);
-//        }
-
+            if(!violations.isEmpty()) {
+                for(ConstraintViolation<Agent> violation : violations) {
+                    result.addMessage(violation.getMessage(), ResultType.INVALID);
+                }
+            }
+        }
         return result;
     }
 }

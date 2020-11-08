@@ -26,7 +26,7 @@
             <td th:text="${agent.firstName}"></td>
             <td th:text="${agent.middleName}"></td>
             <td th:text="${agent.lastName}"></td>
-            <td th:date="${agent.dob}"></td>
+            <td th:text="${agent.dob}"></td>
             <td th:text="${agent.heightInInches}"></td>
             <td>
                 <a th:href="@{/agents/update/{id}(id=${agent.agentId})}">Edit</a>
