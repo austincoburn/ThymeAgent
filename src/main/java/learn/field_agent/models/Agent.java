@@ -1,6 +1,7 @@
 package learn.field_agent.models;
 
 import learn.field_agent.validations.NoYoungAgents;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
 import java.time.LocalDate;
@@ -19,6 +20,7 @@ public class Agent {
     @NotBlank(message = "Last name is required.")
     private String lastName;
 
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     @NoYoungAgents(message = "Agents must be older than 12 years old")
     private LocalDate dob;
 

@@ -37,7 +37,6 @@ public class AgentUIController {
         agent.setFirstName("");
         agent.setLastName("");
         agent.setHeightInInches(55);
-        agent.setDob(LocalDate.now());
 
         return "agents/create";
     }
