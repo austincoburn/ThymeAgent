@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Agent - Delete</title>
+</head>
+<body>
+    <h1>Delete Agent</h1>
+
+    <p>Delete this agent?</p>
+    <form method="post">
+    <ul>
+        <li>First Name: <span th:text="${agent.firstName}">First Name</span></li>
+        <li>Middle Name: <span th:text="${agent.middleName}">Middle Name</span></li>
+        <li>Last Name: <span th:text="${agent.lastName}">Last Name</span></li>
+        <li>Date of Birth: <span th:text="${agent.dob}">Date of Birth</span></li>
+        <li>Height in inches: <span th:text="${agent.heightInInches}">Height in Inches</span></li>
+    </ul>
+
+
+        <button type="submit">Delete</button>
+        <p><a href="/agents">Cancel</a></p>
+
+    </form>
+</body>
+</html>

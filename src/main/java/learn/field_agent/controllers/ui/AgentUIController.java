@@ -8,11 +8,9 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.time.LocalDate;
 import java.util.List;
 
 @Controller
@@ -72,6 +70,25 @@ public class AgentUIController {
 
         Result<Agent> serviceResult = service.update(agent);
 
+        return "redirect:/agents";
+    }
+
+    @GetMapping("/delete/{id}")
+    public String delete(@PathVariable int id, Model model) throws DataAccessException {
+        Agent agent = service.findById(id);
+
+        if (agent == null) {
+            return "not-found";
+        }
+
+        model.addAttribute("agent", agent);
+
+        return "agents/delete";
+    }
+
+    @PostMapping("/delete/{id}")
+    public String delete(@PathVariable int id) throws DataAccessException {
+        service.deleteById(id);
         return "redirect:/agents";
     }
 }
